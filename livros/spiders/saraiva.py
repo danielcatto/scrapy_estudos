@@ -13,36 +13,27 @@ from scrapy.selector import Selector
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "amazonAutomatize"
+    name = "saraiva"
     start_urls = [
-        'https://www.amazon.com.br/Automatize-Tarefas-Ma%C3%A7antes-com-Python/dp/8575224468/ref=sr_1_1?ie=UTF8&qid=1503414264&sr=8-1&keywords=automatize+tarefas+ma%C3%A7antes+com+python'
+        'https://www.saraiva.com.br/programao-em-python-3-uma-introduo-completa-linguagem-python-2858807.html'
     ]
 
 
     def parse(self, response):
 
         sel = Selector(response)
-        preco_comparativo = self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
         print("\n\n###################################################")
 
-        for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
-
-            preco = sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]
-            data = date.today()
-            preco_float = self.para_float(self.para_converte(preco))
-            preco_str = self.para_converte(preco)
-            print('produto: {}'.format(produto))
-            print('preco: {}, data: {}'.format(preco_str, data))
-
+        for produto in sel.xpath("//h1[@class='livedata']//text()").extract():
+            preco = sel.xpath()
+            print('produto', produto)
             yield{
-                'produto': produto, 'preco': preco, 'data': str(data)
+                'produto': produto
             }
-            self.comparar_preco(produto,preco_comparativo, preco_float)
-            print("\n###################################################\n\n")
             time.sleep(3)
 
     def comparar_preco(self, produto, preco_comparativo, preco):
-        if (preco < preco_comparativo):
+        if (preco <= preco_comparativo):
             desc = ((preco / preco_comparativo) * 100) - 100
             # print('desconto de :', abs(desc))
             if abs(desc) >= 30:
@@ -52,7 +43,7 @@ class QuotesSpider(scrapy.Spider):
                 print('1 => sem desconto maior que 30%')
 
         else:
-            print('1sem desconto, ou aumento de preço')
+            print('sem desconto, ou aumento de preço2')
 
     def para_float(self, preco):
         preco_float = float(preco)
