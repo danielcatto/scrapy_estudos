@@ -11,7 +11,7 @@ import json
 import urllib.parse
 from scrapy.selector import Selector
 class QuotesSpider(scrapy.Spider):
-    name = "amazonTwitter"
+    name = "amazon4"
     start_urls = [
         'https://www.amazon.com.br/Automatize-Tarefas-Ma%C3%A7antes-com-Python/dp/8575224468/ref=sr_1_1?ie=UTF8&qid=1503414264&sr=8-1&keywords=automatize+tarefas+ma%C3%A7antes+com+python',
         'https://www.amazon.com.br/Introdu%C3%A7%C3%A3o-%C3%A0-Programa%C3%A7%C3%A3o-com-Python/dp/8575224085/ref=pd_sim_14_3?_encoding=UTF8&psc=1&refRID=A27DQPZMEM90Y1GKJZ0N',

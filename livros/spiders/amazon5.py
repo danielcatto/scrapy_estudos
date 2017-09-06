@@ -8,7 +8,7 @@ import urllib.parse
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "amazon3"
+    name = "amazon5"
     start_urls = [
         'https://www.amazon.com.br/Web-Scraping-Python-Ryan-Mitchell/dp/8575224476/ref=sr_1_9?s=books&ie=UTF8&qid=1503538574&sr=1-9&keywords=python'
     ]
