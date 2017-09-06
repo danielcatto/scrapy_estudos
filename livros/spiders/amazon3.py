@@ -28,7 +28,6 @@ class QuotesSpider(scrapy.Spider):
                 if preco <= 57:
                     self.twittar(preco)
                     print("\n############# FIM ##################\n\n\n")
-                    return 0
                 print('aguardando 30 segundos')
                 time.sleep(60)
 
@@ -47,7 +46,7 @@ class QuotesSpider(scrapy.Spider):
         token = oauth2.Token(token_key, token_secret)
         cliente = oauth2.Client(consumer, token)
 
-        pesquisa = 'livro, automatize tarefas maçantes com python, preço: R$' + str(preco)
+        pesquisa = 'livro, automatize tarefas macantes com python, preco: R$' + str(preco)
         pesquisa_codificada = urllib.parse.quote(pesquisa, safe='')
 
         requisicao = cliente.request('https://api.twitter.com/1.1/statuses/update.json?status=' + pesquisa_codificada,
