@@ -1,5 +1,4 @@
 import scrapy
-import re
 
 class QuotesSpider(scrapy.Spider):
     name = "redbug_preco_re"

@@ -20,26 +20,25 @@ class QuotesSpider(scrapy.Spider):
 
 
     def parse(self, response):
-
         sel = Selector(response)
-        preco_comparativo = self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
-        print("\n\n###################################################")
 
-        for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
+        print('##########################################################')
+        for controle in range(2):
+            for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
+                descricao = produto[:50]
+                preco = sel.xpath("//span[@class='a-color-price']//text()").extract_first()
+                data = date.today()
+                preco_float = para_float(preco)
+                print('produto: {}'.format(descricao))
+                print('preço: {}'.format(preco))
+                print('data: {}'.format(data))
 
-            preco = sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]
-            data = date.today()
-            preco_float = self.para_float(self.para_converte(preco))
-            preco_str = self.para_converte(preco)
-            print('produto: {}'.format(produto))
-            print('preco: {}, data: {}'.format(preco_str, data))
-
-            yield{
-                'produto': produto, 'preco': preco, 'data': str(data)
+            print('##########################################################\n')
+            yield {
+                'produto':produto[:50],'preco':sel.xpath("//span[@class='a-color-price']//text()").extract_first()
             }
-            self.comparar_preco(produto,preco_comparativo, preco_float)
-            print("\n###################################################\n\n")
-            time.sleep(3)
+            time.sleep(0.9 )
+
 
     def comparar_preco(self, produto, preco_comparativo, preco):
         if (preco < preco_comparativo):
@@ -55,7 +54,8 @@ class QuotesSpider(scrapy.Spider):
             print('1sem desconto, ou aumento de preço')
 
     def para_float(self, preco):
-        preco_float = float(preco)
+        convertido = self.para_converte(preco)
+        preco_float = float(convertido)
         return preco_float
 
 

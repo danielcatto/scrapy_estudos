@@ -18,14 +18,16 @@ class QuotesSpider(scrapy.Spider):
 
     def parse(self, response):
         sel = Selector(response)
+
         print('')
         print('##########################################################')
-        for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
-            yield
-            print('\n\nproduto: {}'.format(produto[:50]))
-            print('preço: {}'.format(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
-            print('data: {}'.format(date.today()))
-        print('##########################################################\n')
+        for i in range(2):
+            for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
+                print('produto: {}'.format(produto[:50]))
+                print('preço: {}'.format(sel.xpath("//span[@class='a-color-price']//text()").extract_first()))
+                print('data: {}'.format(date.today()))
+            print('##########################################################\n')
+            time.sleep(0.9 )
 
 
     def comprar(self,preco):
