@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75fb4f5a-c709-4f42-ad85-c9a721555aa1" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scrapy_estudos.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/livros/spiders/saida.json" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/livros/spiders/amazon_automatize.json" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/livros/spiders/saidaa.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/livros/spiders/amazon6.py" afterPath="$PROJECT_DIR$/livros/spiders/amazon6.py" />
