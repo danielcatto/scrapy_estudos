@@ -23,14 +23,11 @@ class QuotesSpider(scrapy.Spider):
 
         sel = Selector(response)
         print("\n\n###################################################")
-
-        for produto in sel.xpath("//h1[@class='livedata']//text()").extract():
-            preco = sel.xpath()
-            print('produto', produto)
-            yield{
-                'produto': produto
-            }
-            time.sleep(3)
+        produto = sel.xpath("//h1[@class='livedata']//text()").extract()
+        preco = sel.xpath("//span[@class='prince-val']//text()").extract()
+        print(produto[0])
+        print(preco)
+        print("\n\n###################################################")
 
     def comparar_preco(self, produto, preco_comparativo, preco):
         if (preco <= preco_comparativo):
