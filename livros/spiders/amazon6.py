@@ -18,7 +18,7 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         controle = True
         sel = Selector(response)
-        preco_comparativo = 71  #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
+        preco_comparativo = 71.0  #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
         print("\n\n###################################################")
         for i in range(1):
             for produto in sel.xpath("//span[@id='productTitle']//text()").extract():

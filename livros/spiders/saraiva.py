@@ -1,16 +1,13 @@
-## coding: utf-8
+# coding: utf-8
 
-#>>> sel.xpath("//span[@class='a-size-base']//text()").extract()
-#sel.xpath("//span[@class='a-color-price']//text()").extract()
 import scrapy
 import time
-from datetime import date
 
 import oauth2
 import json
-import urllib.parse
-from scrapy.selector import Selector
 
+from scrapy.selector import Selector
+import facebook
 
 class QuotesSpider(scrapy.Spider):
     name = "saraiva"
@@ -22,11 +19,19 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
 
         sel = Selector(response)
-        print("\n\n###################################################")
-        produto = sel.xpath("//h1[@class='livedata']//text()").extract()
-        preco = sel.xpath("//span[@class='prince-val']//text()").extract()
-        print(produto[0])
-        print(preco)
+        print("\n\n###################################################\n\n")
+        for i in range(10):
+            produto = sel.xpath("//h1[@class='livedata']//text()").extract()
+            preco = response.css("div.simple-price span.final-price::text").re(r'\w+\,\w+')
+            print(produto[0])
+            print(preco[0])
+            yield {
+                'nome': produto[0],
+                'preco': preco[0]
+
+                }
+            time.sleep(60)
+
         print("\n\n###################################################")
 
     def comparar_preco(self, produto, preco_comparativo, preco):
@@ -50,6 +55,14 @@ class QuotesSpider(scrapy.Spider):
     def para_converte(self, preco):
         preco_convertido = preco.replace(",", ".")
         return preco_convertido
+
+
+    def alertar_facebook(self, produto, preco, preco_comparativo, url, desconto):
+        token = 'EAACEdEose0cBAA7V5PaZB2HJuV7OtrJpHEnGbxdXpxeAl3LTzKlrKbEvY0CH9Pk3AZA8P1uEhji5XOTtqAgmGsAN5ai6w816TEfkXgxriLKIruqvMipmlD9iII7wZCapzgNb0fyl5gbQxTvKvSefyPJ3z7TZB4VHZAZAYezZAhMYKhSmfcuaxZBvchC6QjzmEg4ZCeXlBnN6EygZDZD'
+        graph = facebook.GraphAPI(token)
+        graph.put_object("me", "feed", message="Livro: {} está com desconto de {}\npreco:{}\npreço anterior{}\nurl: {}".format(produto, desconto,preco, preco_comparativo, url))
+
+
 
     def twittar1(self, produto, preco ):
         print('produto: {}, preco: {}'.format(produto, preco))
@@ -77,3 +90,4 @@ class QuotesSpider(scrapy.Spider):
         objeto = json.loads(decodificar)
 
         print(objeto)
+

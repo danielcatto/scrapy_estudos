@@ -2,7 +2,7 @@ import scrapy
 import re
 import time
 import facebook
-
+from social_lib.social_site import Social
 class QuotesSpider(scrapy.Spider):
     name = "univespcss"
     start_urls = [
