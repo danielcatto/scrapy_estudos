@@ -3,13 +3,13 @@
 import scrapy
 import time
 from datetime import date
-import facebook
+from facepy import GraphAPI
 import oauth2
 import json
 from scrapy.selector import Selector
 
 class QuotesSpider(scrapy.Spider):
-    name = "amazonAutomatize"
+    name = "auto"
     start_urls = [
         'https://www.amazon.com.br/Automatize-Tarefas-Ma%C3%A7antes-com-Python/dp/8575224468/ref=sr_1_1?ie=UTF8&qid=1503414264&sr=8-1&keywords=automatize+tarefas+ma%C3%A7antes+com+python'
     ]
@@ -18,7 +18,7 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         controle = True
         sel = Selector(response)
-        preco_comparativo = 71.0  #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
+        preco_comparativo = 79  #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
         print("\n\n###################################################")
         for i in range(1):
             for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
@@ -37,16 +37,22 @@ class QuotesSpider(scrapy.Spider):
     def comparar_preco(self, produto, preco_comparativo, preco, url):
         if (preco <= preco_comparativo):
             desc = ((preco / preco_comparativo) * 100) - 100
-            if abs(desc) >= 30:
-                print('desconto: {:.2f}%'.format(abs(desc)))
-                self.twittar1(produto, str(preco),str(preco_comparativo), url, desc)
-                self.publicar_facebook(self, produto, preco, preco_comparativo, url, desc)
+            if abs(desc) > 0:
+
+                '''
+                print('Listar desconto: {:.2f}%'.format(abs(desc)))
+                print(preco, preco_comparativo, url)
+                #self.twittar1(produto, str(preco),str(preco_comparativo), url, desc)
+                '''
+                mensagem = 'Teste scrapy\nLivro {},\nPreço: {}\nEndereço {}\nDesconto: {:.2f}%'.format(produto, preco, url, abs(desc))
+                print(mensagem)
+                #self.test_post(mensagem)
             else:
                 print('livro: {}\nPreço {}'.format(produto, preco))
                 print('desconto: {:.2f}%'.format(abs(desc)))
-                print('Sem desconto maior que 30%')
+                print('Sem desconto%')
         else:
-            print('sem desconto, ou aumento de preço2')
+            print('sem desconto, ou aumento de preço')
 
 
     def para_float(self, preco):
@@ -58,11 +64,9 @@ class QuotesSpider(scrapy.Spider):
         preco_convertido = preco.replace(",", ".")
         return preco_convertido
 
-
-    def publicar_facebook(self, produto, preco, preco_comparativo, url, desconto):
-        token = ''
-        graph = facebook.GraphAPI(token)
-        graph.put_object("me", "feed", message="Livro: {} está com desconto de {}\npreco:{}\npreço anterior{}\nurl: {}".format(produto, desconto,preco, preco_comparativo, url))
+    def test_post(self, mensagem):
+        graph = GraphAPI('')
+        graph.post(path='me/feed?message='+mensagem)
 
 
     def twittar1(self, produto, preco, preco_comparativo, url, desconto):
