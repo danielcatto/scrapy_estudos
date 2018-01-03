@@ -1,17 +1,16 @@
-# coding: utf-8
+## coding: utf-8
 
-#>>> sel.xpath("//span[@class='a-size-base']//text()").extract()
-#sel.xpath("//span[@class='a-color-price']//text()").extract()
 import scrapy
 import time
 from datetime import date
-
-import oauth2
+#from facepy import GraphAPI
+from .facepy.graph_api import GraphAPI
+#import oauth2
 import json
-import urllib.parse
 from scrapy.selector import Selector
+
 class QuotesSpider(scrapy.Spider):
-    name = "amazonAutomatize"
+    name = "auto"
     start_urls = [
         'https://www.amazon.com.br/Automatize-Tarefas-Ma%C3%A7antes-com-Python/dp/8575224468/ref=sr_1_1?ie=UTF8&qid=1503414264&sr=8-1&keywords=automatize+tarefas+ma%C3%A7antes+com+python'
     ]
@@ -20,38 +19,51 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         controle = True
         sel = Selector(response)
-        preco_comparativo = 78.80 #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
+        preco_comparativo = 81.01 #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
         print("\n\n###################################################")
-        for i in range(3):
-            for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
 
+        for i in range(100):
+            for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
                 preco = sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]
                 data = date.today()
+                url = response.url
                 preco_float = self.para_float(self.para_converte(preco))
-
-                print('produto: {}'.format(produto))
-                print('preco: {}. data: {}'.format(preco, data))
-                preco_str = self.para_converte(preco)
                 yield{
-                    'produto': produto, 'valor': preco, 'data': str(data)
+                    'produto': produto, 'preco': preco, 'data': str(data), 'url': url
                 }
-
-                self.comparar_preco(produto,preco_comparativo, preco_float)
+            self.comparar_preco(produto,preco_comparativo, preco_float, url)
+            print('controle', controle)
             print("\n###################################################\n\n")
-            time.sleep(3)
+            print('sleep 3 segundos')
+            time.sleep(10)
 
-    def comparar_preco(self, produto, preco_comparativo, preco):
+
+    def comparar_preco(self, produto, preco_comparativo, preco, url):
         if (preco <= preco_comparativo):
             desc = ((preco / preco_comparativo) * 100) - 100
-            print('desconto até agora: {:.2f}'.format(desc))
-            if abs(desc) >= 30:
-                print('desconto: {:.2f}%'.format(abs(desc)))
-                self.twittar(produto, str(preco))
-            else:
-                print('1 => sem desconto maior que 30%')
 
+            if abs(desc) > 30:
+                '''
+                print('Listar desconto: {:.2f}%'.format(abs(desc)))
+                print(preco, preco_comparativo, url)
+                #self.twittar1(produto, str(preco),str(preco_comparativo), url, desc)
+                '''
+                mensagem = 'Livro {},\nPreço: {}\nEndereço {}\nDesconto: {:.2f}%'.format(produto, preco, url, abs(desc))
+                print(mensagem)
+                self.test_post(mensagem)
+                return False
+            else:
+                print('livro: {}\nPreço {}'.format(produto, preco))
+                print('desconto: {:.2f}%'.format(abs(desc)))
+                print('Sem desconto%')
+
+                return True
         else:
-            print('sem desconto, ou aumento de preço2')
+            print('sem desconto, ou aumento de preço')
+            print('livro: {}\nPreço {}'.format(produto, preco))
+
+            return True
+
 
     def para_float(self, preco):
         preco_float = float(preco)
@@ -62,29 +74,6 @@ class QuotesSpider(scrapy.Spider):
         preco_convertido = preco.replace(",", ".")
         return preco_convertido
 
-    def twittar1(self, produto, preco ):
-        print('produto: {}, preco: {}'.format(produto, preco))
-        print(type(produto))
-        print(type(preco))
-
-
-    def twittar(self,produto, preco):
-        consusmer_key = 'yT57HTvtM7drPqQ1fVMtbdsGJ'
-        consusmer_secret = 'AYke23tMy9QNMuWpVMD8UTu7MiP8VL2Aee0j7KT8HuEV88uSqZ'
-        token_key = '50165680-o7CcGmvB9XmSEdDkWGNNnjUEUNsBXD4vErRMG22k1'
-        token_secret = 'zRuIUYEuJfiV7pXQPWkzYgy1a5KODWseIGSoC7iGHJGkU'
-
-        consumer = oauth2.Consumer(consusmer_key, consusmer_secret)
-        token = oauth2.Token(token_key, token_secret)
-        cliente = oauth2.Client(consumer, token)
-
-        pesquisa = produto + preco
-        pesquisa_codificada = urllib.parse.quote(pesquisa, safe='')
-
-        requisicao = cliente.request('https://api.twitter.com/1.1/statuses/update.json?status=' + pesquisa_codificada,
-                                     method='POST')
-        decodificar = requisicao[1].decode()
-
-        objeto = json.loads(decodificar)
-
-        print(objeto)
+    def test_post(self, mensagem):
+        graph = GraphAPI('EAACEdEose0cBAPZCT9ZBrB7XvUxhK0YaDVT7W47wHk0WeaLi2gXhbQ6SZBROO3DHBT6HAN0utLZBCP7nkpONXc9RMtuu1MZAuaVH2gkUZAa5MffTliv1lcdZCsSvZAZAOxCpgO9W9cO7ovVJcYYgwVdrczPHREdEg9rLWZCfyBBsPBgjjY0uYEjAjl4kMd2eHUhLIZD')
+        graph.post(path='me/feed?message='+mensagem)
