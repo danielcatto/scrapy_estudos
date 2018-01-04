@@ -43,10 +43,10 @@ class Twitter:
             arq.writelines(twit['user']['screen_name'])
 
 '''
-consumer_key = 'yT57HTvtM7drPqQ1fVMtbdsGJ'
-consumer_secret = 'AYke23tMy9QNMuWpVMD8UTu7MiP8VL2Aee0j7KT8HuEV88uSqZ'
-token_key =	'50165680-o7CcGmvB9XmSEdDkWGNNnjUEUNsBXD4vErRMG22k1'
-token_secret	= 'zRuIUYEuJfiV7pXQPWkzYgy1a5KODWseIGSoC7iGHJGkU'
+consumer_key = ''
+consumer_secret = ''
+token_key =	''
+token_secret	= ''
 
 
 t = Twitter(consumer_key, consumer_secret, token_key,token_secret)
