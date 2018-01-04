@@ -75,5 +75,5 @@ class QuotesSpider(scrapy.Spider):
         return preco_convertido
 
     def test_post(self, mensagem):
-        graph = GraphAPI('EAACEdEose0cBAPZCT9ZBrB7XvUxhK0YaDVT7W47wHk0WeaLi2gXhbQ6SZBROO3DHBT6HAN0utLZBCP7nkpONXc9RMtuu1MZAuaVH2gkUZAa5MffTliv1lcdZCsSvZAZAOxCpgO9W9cO7ovVJcYYgwVdrczPHREdEg9rLWZCfyBBsPBgjjY0uYEjAjl4kMd2eHUhLIZD')
+        graph = GraphAPI('')
         graph.post(path='me/feed?message='+mensagem)
