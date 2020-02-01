@@ -11,4 +11,7 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         sel = response.css('div.a-row h2::text')[0].extract()
         for produtos in sel:
+            print('\n\n\n\n##################################################')
+
             print(produtos)
+print('##################################################\n\n\n')

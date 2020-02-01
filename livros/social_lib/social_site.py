@@ -1,11 +1,14 @@
 # coding: utf-8
 
-import facebook
+
 import oauth2
 import json
 
 class Social():
-    def publicar_facebook(self,token, mensagem):
+    """
+    class para publicar no facebook, necessário token de acesso
+    """
+    def publicar_facebook(self, token, mensagem):
         key_token = token
         graph = facebook.GraphAPI(key_token)
         graph.put_object("me", "feed", message=mensagem)
@@ -22,3 +25,8 @@ class Social():
         decodificar = requisicao[1].decode()
         objeto = json.loads(decodificar)
         print(objeto)
+
+
+soc = Social()
+
+soc.publicar_facebook()

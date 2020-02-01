@@ -1,0 +1,9 @@
+Server: nginx/1.14.0 (Ubuntu)
+Date: Sat, 28 Dec 2019 22:11:08 GMT
+Content-Type: text/html; charset=utf-8
+X-Frame-Options: SAMEORIGIN
+Vary: Cookie
+Expires: Sat, 28 Dec 2019 22:11:38 GMT
+Cache-Control: max-age=30
+Set-Cookie: csrftoken=7VpkHBPVFyA5FEyVN6VJ7erXViAgHv6HXIGrA1SSJsd6T4MnkLDNDcLZLHIcwk6M; expires=Sat, 26-Dec-2020 22:11:08 GMT; Max-Age=31449600; Path=/
+Content-Encoding: gzip

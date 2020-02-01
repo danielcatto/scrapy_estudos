@@ -1,12 +1,14 @@
 ## coding: utf-8
 
 import scrapy
+from scrapy.selector import Selector
+
 import time
 from datetime import date
 from facepy import GraphAPI
 import oauth2
 import json
-from scrapy.selector import Selector
+
 
 class QuotesSpider(scrapy.Spider):
     name = "auto"
@@ -20,6 +22,7 @@ class QuotesSpider(scrapy.Spider):
         sel = Selector(response)
         preco_comparativo = 79  #self.para_float(self.para_converte(sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]))
         print("\n\n###################################################")
+        print('inicio')
         for i in range(1):
             for produto in sel.xpath("//span[@id='productTitle']//text()").extract():
                 preco = sel.xpath("//span[@class='a-color-base']//text()").re(r'\w\w\,\w\w')[0]

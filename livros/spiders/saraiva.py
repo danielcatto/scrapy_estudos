@@ -2,12 +2,10 @@
 
 import scrapy
 import time
-
 import oauth2
 import json
-
 from scrapy.selector import Selector
-import facebook
+
 
 class QuotesSpider(scrapy.Spider):
     name = "saraiva"
@@ -56,11 +54,6 @@ class QuotesSpider(scrapy.Spider):
         preco_convertido = preco.replace(",", ".")
         return preco_convertido
 
-
-    def alertar_facebook(self, produto, preco, preco_comparativo, url, desconto):
-        token = 'EAACEdEose0cBAA7V5PaZB2HJuV7OtrJpHEnGbxdXpxeAl3LTzKlrKbEvY0CH9Pk3AZA8P1uEhji5XOTtqAgmGsAN5ai6w816TEfkXgxriLKIruqvMipmlD9iII7wZCapzgNb0fyl5gbQxTvKvSefyPJ3z7TZB4VHZAZAYezZAhMYKhSmfcuaxZBvchC6QjzmEg4ZCeXlBnN6EygZDZD'
-        graph = facebook.GraphAPI(token)
-        graph.put_object("me", "feed", message="Livro: {} está com desconto de {}\npreco:{}\npreço anterior{}\nurl: {}".format(produto, desconto,preco, preco_comparativo, url))
 
 
 
